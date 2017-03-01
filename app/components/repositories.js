@@ -14,6 +14,8 @@ import {
 var styles = StyleSheet.create({
     container: {
         flex: 1,
+        marginTop: 65,
+        backgroundColor: "#fff"
     },
     rowContainer: {
         flexDirection: 'column',
@@ -41,7 +43,7 @@ export default class Repositories extends Component {
     this.props.navigator.push({
       component: MyWebView,
       title: "Web View",
-      passProps: {url}
+      props: {url}
     })
   }
   render() {

@@ -10,7 +10,9 @@ import {
 
 var styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        marginTop: 65,
+        backgroundColor: "#fff"
     },
     buttonText: {
         fontSize: 18,
