@@ -10,7 +10,8 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f6f6ef",
-    flexDirection: "column"
+    flexDirection: "column",
+    marginTop: 65
   }
 });
 

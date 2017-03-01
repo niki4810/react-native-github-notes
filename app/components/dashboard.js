@@ -15,7 +15,8 @@ import Notes from "./notes";
 var styles = StyleSheet.create({
   container: {
     marginTop: 65,
-    flex: 1
+    flex: 1,
+    backgroundColor: "#fff"
   },
   image: {
     height: 350,
@@ -39,7 +40,7 @@ export default class Dashboard extends Component {
     this.props.navigator.push({
       component: Profile,
       title: "Profile Page",
-      passProps: {userInfo: this.props.userInfo}
+      props: {userInfo: this.props.userInfo}
     });
   }
 
@@ -49,7 +50,7 @@ export default class Dashboard extends Component {
       this.props.navigator.push({
         component: Repositories,
         title: "Repos",
-        passProps: {
+        props: {
           userInfo: userInfo,
           repos: res
         }
@@ -64,7 +65,7 @@ export default class Dashboard extends Component {
       this.props.navigator.push({
         component: Notes,
         title: "Notes",
-        passProps: {
+        props: {
           notes: res,
           userInfo
         }
