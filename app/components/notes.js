@@ -9,14 +9,15 @@ import {
   TextInput,
   TouchableHighlight
 } from 'react-native';
-import {api} from "../utils/api";
-
+import {connect} from "react-redux";
+import {
+  addNewNote
+} from "../actions";
 
 var styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        marginTop: 65,
         backgroundColor: "#fff"
     },
     buttonText: {
@@ -47,7 +48,7 @@ var styles = StyleSheet.create({
     }
 });
 
-export default class Notes extends Component {
+class Notes extends Component {
   constructor(props) {
     super(props);
     this.ds = new ListView.DataSource({
@@ -55,12 +56,17 @@ export default class Notes extends Component {
     });
     this.state = {
       dataSource: this.ds.cloneWithRows(props.notes),
-      note: "",
-      error: ""
+      note: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataSource: this.ds.cloneWithRows(nextProps.notes)
+    });
   }
 
   renderRow(rowData) {
@@ -85,20 +91,11 @@ export default class Notes extends Component {
     this.setState({
       note: ""
     });
-    api.addNote(this.props.userInfo.login, note)
-    .then((data) => {
-      const newNotes = Object.assign({}, this.props.notes, {
-        [data.name]: note
-      });
-      this.setState({
-        note: "",
-        dataSource: this.ds.cloneWithRows(newNotes)
-      });
-    }).catch((err) => {
-      console.log(`Request Failed : err`);
-      this.setState({error: err});
-    });
+    const { userInfo = {}, addANewNote } = this.props;
+    const { login = "" } = userInfo;
+    addANewNote({login, note})
   }
+
   footer() {
     return (
       <View style={styles.footerContainer}>
@@ -129,3 +126,21 @@ export default class Notes extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    userInfo: state.bio.details,
+    notes: state.notes.details
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addANewNote(payload) {
+      dispatch(addNewNote(payload));
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Notes);

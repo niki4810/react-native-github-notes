@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {connect} from "react-redux";
+import {fetchBio} from "../actions";
 
 import {
   Text,
@@ -15,7 +17,6 @@ var styles = StyleSheet.create({
   mainContainer: {
       flex: 1,
       padding: 30,
-      marginTop: 65,
       flexDirection: 'column',
       justifyContent: 'center',
       backgroundColor: '#48BBEC'
@@ -55,7 +56,7 @@ var styles = StyleSheet.create({
   }
 });
 
-export default class Main extends Component {
+class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,38 +75,18 @@ export default class Main extends Component {
   }
 
   handleSubmit(ev) {
-    //update our indicatorIOS spinner
-    this.setState({
-      isLoading: true
+    this.props.handleSearchClick({
+      username: this.state.username
     });
-
-    const {username} = this.state;
-    // fetch data from Github
-    api.getBio(username).then((res) => {
-      if(res.message === "Not Found") {
-        this.setState({
-          error: "User Not Found",
-          isLoading: false
-        });
-      } else {
-        this.props.navigator.push({
-          title: res.name || "Select an Option",
-          component: Dashboard,
-          props: {userInfo: res}
-        });
-
-        this.setState({
-          isLoading: false,
-          error: false,
-          username: "niki4810"
-        });
-      }
-    });
-    //reroute to the next passing that github information
   }
 
   render() {
-    const {error, isLoading} = this.state;
+    const {bio = {}} = this.props;
+    const {
+      loading,
+      error
+    } = bio;
+
     const showError = (
       error ? <Text> {error} </Text> : <View></View>
     );
@@ -124,7 +105,7 @@ export default class Main extends Component {
           <Text style={styles.buttonText}>Search</Text>
         </TouchableHighlight>
         <ActivityIndicator
-          animating={isLoading}
+          animating={loading}
           size="large"
           color="#111">
         </ActivityIndicator>
@@ -133,3 +114,13 @@ export default class Main extends Component {
     )
   }
 }
+
+export default connect((state)=> {
+  return state;
+}, (dispatch) => {
+  return {
+    handleSearchClick(payload) {
+      dispatch(fetchBio(payload));
+    }
+  }
+})(Main);

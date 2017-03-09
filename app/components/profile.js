@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Badge from "./badge";
 import Separator from "./helpers/separator";
+import {connect} from "react-redux";
 import {
   Text,
   View,
@@ -11,7 +12,6 @@ import {
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 65,
         backgroundColor: "#fff"
     },
     buttonText: {
@@ -31,15 +31,16 @@ var styles = StyleSheet.create({
     }
 });
 
-export default class Profile extends Component{
+class Profile extends Component{
     getRowTitle(user, item){
         item = (item === 'public_repos') ? item.replace('_', ' ') : item;
         return item[0] ? item[0].toUpperCase() + item.slice(1) : item;
     }
+    
     render(){
-        var userInfo = this.props.userInfo;
-        var topicArr = ['company', 'location', 'followers', 'following', 'email', 'bio', 'public_repos'];
-        var list = topicArr.map((item, index) => {
+        const {details:userInfo = {}} = this.props;
+        const topicArr = ['company', 'location', 'followers', 'following', 'email', 'bio', 'public_repos'];
+        const list = topicArr.map((item, index) => {
             if(!userInfo[item]){
                 return <View key={index}/>
             } else {
@@ -56,7 +57,7 @@ export default class Profile extends Component{
         });
         return (
             <ScrollView style={styles.container}>
-                <Badge userInfo={this.props.userInfo}/>
+                <Badge userInfo={userInfo}/>
                 {list}
             </ScrollView>
         )
@@ -64,5 +65,11 @@ export default class Profile extends Component{
 };
 
 Profile.propTypes = {
-    userInfo: PropTypes.object.isRequired
-}
+    details: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return state.bio;
+};
+
+export default connect(mapStateToProps)(Profile);

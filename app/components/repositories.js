@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Badge from "./badge";
 import Separator from "./helpers/separator";
-import MyWebView from "./helpers/mywebview";
+import {connect} from "react-redux";
+import {
+  showWebView
+} from "../actions";
 
 import {
   Text,
@@ -14,7 +17,6 @@ import {
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 65,
         backgroundColor: "#fff"
     },
     rowContainer: {
@@ -38,13 +40,9 @@ var styles = StyleSheet.create({
     }
 });
 
-export default class Repositories extends Component {
+class Repositories extends Component {
   openPage(url) {
-    this.props.navigator.push({
-      component: MyWebView,
-      title: "Web View",
-      props: {url}
-    })
+    this.props.goToWebView(url);    
   }
   render() {
     var repos = this.props.repos;
@@ -75,6 +73,25 @@ export default class Repositories extends Component {
 }
 
 Repositories.propTypes = {
-    userInfo: React.PropTypes.object.isRequired,
-    repos: React.PropTypes.array.isRequired
+  userInfo: React.PropTypes.object.isRequired,
+  repos: React.PropTypes.array.isRequired
 }
+
+const mapStateToProps = (state) => {
+  return {
+    userInfo: state.bio.details,
+    repos: state.repos.details
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    goToWebView(url) {
+      dispatch(showWebView({
+        url
+      }));
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Repositories);
