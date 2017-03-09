@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from "react-redux";
 
 import {
   View,
@@ -10,12 +11,11 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f6f6ef",
-    flexDirection: "column",
-    marginTop: 65
+    flexDirection: "column"
   }
 });
 
-export default class MyWebView extends Component {
+class MyWebView extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -24,3 +24,9 @@ export default class MyWebView extends Component {
     );
   }
 }
+
+export default connect((state) => {
+  return {
+    url: state.repos.url
+  };
+})(MyWebView);

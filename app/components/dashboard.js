@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import {
+  navigatePage,
+  fetchRepos,
+  fetchNotes
+} from "../actions";
 
 import {
   Text,
@@ -7,14 +12,10 @@ import {
   Image,
   TouchableHighlight
 } from 'react-native';
-import {api} from "../utils/api";
-import Profile from "./profile";
-import Repositories from "./repositories";
-import Notes from "./notes";
+import {connect} from "react-redux";
 
 var styles = StyleSheet.create({
   container: {
-    marginTop: 65,
     flex: 1,
     backgroundColor: "#fff"
   },
@@ -28,51 +29,7 @@ var styles = StyleSheet.create({
   }
 });
 
-export default class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-    this.goToProfile = this.goToProfile.bind(this);
-    this.goToRepos = this.goToRepos.bind(this);
-    this.goToNotes = this.goToNotes.bind(this);
-  }
-
-  goToProfile(ev) {
-    this.props.navigator.push({
-      component: Profile,
-      title: "Profile Page",
-      props: {userInfo: this.props.userInfo}
-    });
-  }
-
-  goToRepos(ev) {
-    const {userInfo} = this.props;
-    api.getRepos(userInfo.login).then((res) => {
-      this.props.navigator.push({
-        component: Repositories,
-        title: "Repos",
-        props: {
-          userInfo: userInfo,
-          repos: res
-        }
-      });
-    });
-  }
-
-  goToNotes(ev) {
-    const {userInfo} = this.props;
-    api.getNotes(userInfo.login).then((res) => {
-      res = res || {};
-      this.props.navigator.push({
-        component: Notes,
-        title: "Notes",
-        props: {
-          notes: res,
-          userInfo
-        }
-      });
-    });
-  }
-
+class Dashboard extends Component {
   makeBackground(btn) {
     var obj = {
       flexDirection: "row",
@@ -92,25 +49,32 @@ export default class Dashboard extends Component {
   }
 
   render() {
-    const {userInfo = {}} = this.props;
-    const {avatar_url} = userInfo;
+    const {details = {}, goToProfile, goToRepos, goToNotes} = this.props;
+    const {avatar_url} = details;
     return (
       <View style={styles.container}>
         <Image source={{uri: avatar_url}} style={styles.image}/>
         <TouchableHighlight
-          onPress={this.goToProfile}
+          onPress={goToProfile}
           style={this.makeBackground(0)}
           underlayColor="#88d4f5">
           <Text style={styles.buttonText}>View Profile</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          onPress={this.goToRepos}
+          onPress={() => {
+            const {details = {}} = this.props;
+            const {login} = details;
+            goToRepos(login);
+          }}
           style={this.makeBackground(1)}
           underlayColor="#88d4f5">
           <Text style={styles.buttonText}>View Repos</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          onPress={this.goToNotes}
+          onPress={() => {
+            const {login = ""} = details;
+            goToNotes(login);
+          }}
           style={this.makeBackground(2)}
           underlayColor="#88d4f5">
           <Text style={styles.buttonText}>View Notes</Text>
@@ -119,3 +83,30 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return state.bio;
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    goToProfile() {
+      dispatch(navigatePage({
+        type: "push",
+        key: "profile"
+      }));
+    },
+    goToRepos(login) {
+      dispatch(fetchRepos({
+        login
+      }));
+    },
+    goToNotes(username) {
+      dispatch(fetchNotes({
+        username
+      }));
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
