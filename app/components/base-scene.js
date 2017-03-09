@@ -38,15 +38,15 @@ export default class BaseScene extends Component {
   shouldComponentUpdate(nextProps) {
     return this.props.index !== nextProps.index;
   }
-  
+
   render() {
     const Component = CompsMap[this.props.route.key];
     return (
       <View style={styles.baseScene}>
         <NavBar
+          title={this.props.title}
           index={this.props.index}
-          onPress={this.props.onPopRoute}
-          title={`Scene ${this.props.index}`}>
+          onPress={this.props.onPopRoute}>
         </NavBar>
         <Component />
       </View>

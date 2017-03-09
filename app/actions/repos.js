@@ -44,7 +44,8 @@ export const fetchRepos = (payload) => (dispatch) => {
     // navigate to repos page
     dispatch(navigatePage({
       type: "push",
-      key: "repos"
+      key: "repos",
+      title: "Repos"
     }));
   }).catch((err) => {
     dispatch(fetchReposFail(err));

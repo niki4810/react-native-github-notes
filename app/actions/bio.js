@@ -40,7 +40,8 @@ export const fetchBio = (payload) => (dispatch) => {
       // navigate to dashboard page
       dispatch(navigatePage({
         type: "push",
-        key: "dashboard"
+        key: "dashboard",
+        title: res.name || "Select an Option"
       }));
     }
   });

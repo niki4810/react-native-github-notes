@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     borderColor: "#d8d8d8"
   },
   navBarAction: {
-    width: 50
+    width: 50,
   },
   navBarActionText: {
     color: "#159bde"
@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
     width: 50
   },
   navBarTitle: {
-    fontSize: 14
+    fontSize: 18,
+    fontWeight: "bold"
   }
 });
 
