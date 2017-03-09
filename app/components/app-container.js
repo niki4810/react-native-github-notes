@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class AppContainer extends Component {
+class AppContainer extends Component {  
   render() {
     return (
       <AppNavigator

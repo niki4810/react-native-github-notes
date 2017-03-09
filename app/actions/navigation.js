@@ -5,9 +5,10 @@ export const navigatePage = (payload) => {
   const type = payload.type === "push"
     ? NAVIGATION_PUSH
     : NAVIGATION_POP;
-    
+
   return {
     type,
-    key: payload.key
+    key: payload.key,
+    title: payload.title
   };
 }

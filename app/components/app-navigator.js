@@ -18,10 +18,10 @@ export default class AppNavigator extends Component {
     this._onPopRoute = this.props.onNavigationChange.bind(null, "pop");
     this._renderScene = this._renderScene.bind(this);
   }
-
   _renderScene(sceneProps) {
     return (
       <BaseScene
+        title={sceneProps.navigationState.title}
         index={sceneProps.scene.index}
         route={sceneProps.scene.route}
         onPopRoute={this._onPopRoute}

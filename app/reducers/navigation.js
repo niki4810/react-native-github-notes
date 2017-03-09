@@ -13,6 +13,7 @@ const {
 
 const initialState = {
   index: 0,
+  title: "Github Notetaker",
   routes: [{
     key: "main"
   }]
@@ -21,8 +22,10 @@ const initialState = {
 export const navigationState = (state = initialState, action) => {
   switch (action.type) {
     case NAVIGATION_PUSH:
-      return NavigationStateUtils.push(state, {
+      return Object.assign({}, NavigationStateUtils.push(state, {
         key: action.key
+      }), {
+        title:action.title
       });
     case NAVIGATION_POP:
       return NavigationStateUtils.pop(state);

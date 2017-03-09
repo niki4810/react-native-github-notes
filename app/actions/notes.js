@@ -37,7 +37,8 @@ export const fetchNotes = (payload) => (dispatch) => {
     // navigate to notes page
     dispatch(navigatePage({
       type: "push",
-      key: "notes"
+      key: "notes",
+      title: "Notes"
     }));
   }).catch(err => {
     dispatch(fetchNotesFail(err));

@@ -93,7 +93,8 @@ const mapDispatchToProps = (dispatch) => {
     goToProfile() {
       dispatch(navigatePage({
         type: "push",
-        key: "profile"
+        key: "profile",
+        title: "Profile"
       }));
     },
     goToRepos(login) {
